@@ -2,7 +2,7 @@
 slug: slide-deck-generator
 name: slide-deck-generator
 displayName: Slide Deck Generator
-version: 1.2.0
+version: 1.3.0
 summary: 把笔记、文本、代码变成演示文稿
 description: "Use when the user wants to create slides or a presentation. Triggers on 'make slides', 'create presentation', 'turn this into slides'."
 license: MIT
@@ -10,7 +10,7 @@ license: MIT
 
 # Slide Deck Generator
 
-Converts content into slide decks and generates actual PowerPoint files.
+Converts content into presentations with intelligent adaptation.
 
 ## When to use
 
@@ -24,21 +24,32 @@ Converts content into slide decks and generates actual PowerPoint files.
 - Designing visual layouts
 - Building interactive demos
 
-## Workflow (follow these exact steps)
+## Workflow
 
-### Step 1: Get the content
+### Step 1: Detect content type and audience
 
-Ask user for content OR read their file:
+Read the content and classify:
 
 ```
 read <file_path>
 ```
 
-### Step 2: Create slide structure
+Then ask the user:
+- "Who is the audience?" (technical team / executives / students)
+- "How long is the presentation?"
+- "What style?" (formal / casual / tutorial)
 
-Generate a JSON array. Each slide needs: type, title, content (array), speaker_notes.
+Adapt based on answers:
 
-Save the JSON:
+| Audience | Style |
+|----------|-------|
+| Technical team | Code examples, architecture diagrams, detailed specs |
+| Executives | High-level, metrics, business impact |
+| Students | Step-by-step, examples, exercises |
+
+### Step 2: Generate structure
+
+Create JSON with slides tailored to the audience:
 
 ```
 write slides.json <json_content>
@@ -51,12 +62,28 @@ bash: pip install python-pptx
 bash: python <skill_dir>/scripts/generate_pptx.py slides.json output.pptx
 ```
 
-### Step 4: Deliver
+### Step 4: Multi-turn iteration
 
-Tell user: "PPTX saved to output.pptx. You can open it in PowerPoint or WPS."
+After first draft, support refinement:
+
+- User says "Add more detail to slide 3" → regenerate with more content
+- User says "Make it shorter" → reduce to key points
+- User says "Change style to formal" → adjust tone
+- User says "Add a slide about X" → insert new slide
+- User says "Remove the conclusion" → delete slide
+
+Regenerate PPTX after each change:
+
+```
+bash: python <skill_dir>/scripts/generate_pptx.py slides.json output.pptx
+```
+
+### Step 5: Deliver
+
+Tell user: "PPTX saved to output.pptx"
 
 ## Error handling
 
-- **No content**: Ask user for topic or paste notes
-- **python-pptx not installed**: Output JSON + Markdown, tell user how to install
-- **Script fails**: Output JSON directly, user can paste into any tool
+- **No content**: Ask for topic or paste notes
+- **python-pptx not available**: Output JSON + Markdown
+- **Script fails**: Output JSON directly
