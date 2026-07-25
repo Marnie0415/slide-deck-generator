@@ -19,7 +19,8 @@ Creating slides from scratch is time-consuming. Most people spend more time on f
 
 - Claude Code, Codex, or any LLM agent that supports SKILL.md
 - Git (to clone the repository)
-- No Python, Node.js, or other runtime required
+- Python 3.8+ (for PPTX generation)
+- `pip install python-pptx` (for PPTX generation)
 
 ## Installation
 

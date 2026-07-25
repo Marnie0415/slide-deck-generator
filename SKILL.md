@@ -19,6 +19,22 @@ Converts markdown notes, text content, and code into structured, export-ready pr
 - Generate code walkthrough presentations
 - Build pitch decks or proposal decks
 
+## Bundled tools
+
+### PPTX Generator (`scripts/generate_pptx.py`)
+
+Converts JSON slide definitions into actual PowerPoint files. First generate the JSON structure, then convert to PPTX:
+
+```bash
+# Step 1: Generate JSON (from your content)
+# Step 2: Convert to PPTX
+python scripts/generate_pptx.py slides.json output.pptx
+```
+
+Output: editable .pptx file that opens in PowerPoint, WPS, or Google Slides.
+
+**Install dependencies**: `pip install python-pptx`
+
 ## When NOT to use
 
 - Creating actual PowerPoint/PPTX files (this generates structure, not files)
