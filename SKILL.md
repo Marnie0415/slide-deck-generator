@@ -2,127 +2,95 @@
 slug: slide-deck-generator
 name: slide-deck-generator
 displayName: Slide Deck Generator
-version: 1.0.0
-summary: 把笔记、文本、代码变成结构化的演示文稿
-description: "Use when the user wants to create slides, generate a presentation, turn notes into a deck, or build pitch materials. Triggers on 'make slides', 'create a presentation', 'turn this into slides', 'generate a deck', 'build a pitch deck', or when the user uploads content and wants presentation output."
+version: 1.1.0
+summary: 把笔记、文本、代码变成演示文稿
+description: "Use when the user wants to create slides or a presentation. Triggers on 'make slides', 'create presentation', 'turn this into slides'."
 license: MIT
 ---
 
 # Slide Deck Generator
 
-Converts markdown notes, text content, and code into structured, export-ready presentation slide decks.
+Converts content into structured slide decks and generates actual PowerPoint files using a bundled Python script.
 
 ## When to use
 
-- Create presentation slides from notes or outlines
-- Convert markdown content into slide format
-- Generate code walkthrough presentations
-- Build pitch decks or proposal decks
-
-## Bundled tools
-
-### PPTX Generator (`scripts/generate_pptx.py`)
-
-Converts JSON slide definitions into actual PowerPoint files. First generate the JSON structure, then convert to PPTX:
-
-```bash
-# Step 1: Generate JSON (from your content)
-# Step 2: Convert to PPTX
-python scripts/generate_pptx.py slides.json output.pptx
-```
-
-Output: editable .pptx file that opens in PowerPoint, WPS, or Google Slides.
-
-**Install dependencies**: `pip install python-pptx`
+- Create presentation slides from notes
+- Convert markdown to slide deck
+- Build pitch decks
 
 ## When NOT to use
 
-- Creating actual PowerPoint/PPTX files (this generates structure, not files)
-- Designing visual layouts or choosing color schemes
-- Generating speaker scripts or full narration text
-- Creating video content or animations
-- Building interactive demos or live presentations
+- Creating video content
+- Designing visual layouts (colors, fonts)
+- Building interactive demos
 
 ## Workflow
 
-1. Parse the input to identify topics, key points, and structure.
-2. Map content to slide types.
-3. Generate slide sequence following the deck flow.
-4. Add speaker notes for each slide.
-5. Output as JSON array or Markdown slide list.
+### Step 1: Understand the content
 
-## Slide types
+Use `read` tool to examine the input:
 
-1. **Title Slide**: Title + subtitle + date
-2. **Section Divider**: Topic transition with section number
-3. **Content Slide**: Heading + 3 to 5 bullet points
-4. **Code Slide**: Heading + code block with annotation
-5. **Chart Slide**: Heading + data description
-6. **Closing Slide**: Summary + call to action + contact
+```
+read <file_path>
+```
 
-## Deck flow
+Or work with the content the user pasted directly.
 
-Always follow this sequence:
-- Title slide
-- Agenda / overview (3 to 5 items)
-- Content sections (3 to 7 slides each)
-- Summary slide
-- Q&A or next steps slide
+### Step 2: Generate slide structure
 
-## Style rules
+Create a JSON array of slides. Each slide has: type, title, content (array), speaker_notes.
 
-- One idea per slide. If you need two ideas, use two slides.
-- Bullet points: max 5 per slide, max 8 words per bullet.
-- No paragraphs on slides. Prose goes in speaker notes.
-- Headings are verbs or questions, not nouns. "Reduce latency" not "Latency reduction."
-- Code slides: max 15 lines. Highlight the key lines.
-- Transitions: each slide should answer "why am I seeing this now?"
-
-## Handling different inputs
-
-- **Markdown**: Parse headings as slide titles, bullets as content.
-- **Prose**: Extract key points, group into logical slides.
-- **Code**: Create a code slide + explanation slide pair.
-- **Thin source**: Generate a template deck with placeholder sections and ask for more detail.
-
-## Error handling
-
-- **Input too short** (under 20 words): Ask for more content or specify the topic.
-- **No clear structure**: Generate a generic template and ask user to fill in sections.
-- **Too many topics** (more than 7): Ask user to pick top 3-5, or split into multiple decks.
-- **Code-only input**: Create code walkthrough deck with explanation slides between code slides.
-- **Non-technical content**: Adapt slide types (remove code slides, add more content slides).
-
-## Examples
-
-### Example 1: Meeting notes to pitch deck
-Input: Notes from a product planning meeting with 5 feature ideas
-Output: 12-slide deck with title, problem, solution, features, timeline, team, ask.
-
-### Example 2: Markdown outline to tutorial deck
-Input: Markdown with 3 sections about Docker basics
-Output: 15-slide deck with title, agenda, 3 sections (4 slides each), summary, Q&A.
-
-### Example 3: Code to walkthrough deck
-Input: A Python class with 3 methods
-Output: 8-slide deck with title, overview, method explanations, usage example, summary.
-
-## Known limitations
-
-- Does not generate actual PPTX/PPT files — output is structured data only
-- No visual design, themes, or styling applied
-- Cannot include images or embedded media
-- Chart slides are descriptive only (no actual charts generated)
-- Speaker notes are brief — not full scripts
-
-## Output format
-
-JSON array of slide objects:
 ```json
 [
-  {"type": "title", "title": "Presentation", "content": [], "speaker_notes": ""},
-  {"type": "content", "title": "Section 1", "content": ["Point 1", "Point 2"], "speaker_notes": "Context..."}
+  {"type": "title", "title": "My Deck", "content": [], "speaker_notes": "Opening remarks"},
+  {"type": "content", "title": "Key Point", "content": ["Bullet 1", "Bullet 2"], "speaker_notes": "Explain..."},
+  {"type": "closing", "title": "Summary", "content": ["Takeaway 1"], "speaker_notes": "Wrap up"}
 ]
 ```
 
-Also supports Markdown slide list format for quick sharing.
+### Step 3: Save JSON
+
+```bash
+write slides.json <json_content>
+```
+
+### Step 4: Generate PPTX
+
+```bash
+pip install python-pptx
+python <skill_dir>/scripts/generate_pptx.py slides.json output.pptx
+```
+
+### Step 5: Deliver
+
+Tell the user the PPTX file is ready at the output path.
+
+## Slide types
+
+| Type | Use for |
+|------|---------|
+| title | Opening slide |
+| section | Topic divider |
+| content | Bullet points (max 5) |
+| code | Code with annotation |
+| closing | Summary + CTA |
+
+## Output
+
+- **JSON**: Structured slide definition (always generated)
+- **PPTX**: Editable PowerPoint file (when python-pptx is installed)
+- **Markdown**: Fallback slide list (when no Python available)
+
+## Error handling
+
+- **No content provided**: Ask user for the topic or paste their notes
+- **Content too vague**: Generate a template deck with placeholders, ask for specifics
+- **python-pptx not installed**: Output JSON + Markdown instead, tell user how to install
+- **Script fails**: Output the JSON directly, user can paste into any presentation tool
+
+## Known limitations
+
+- No visual design (colors, fonts, images) — user styles the PPTX manually
+- Chart slides are text descriptions only, not actual charts
+- Speaker notes are brief — not full scripts
+- Fixed slide layout (16:9)
