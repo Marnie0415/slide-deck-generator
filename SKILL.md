@@ -1,7 +1,11 @@
 ---
+slug: slide-deck-generator
 name: slide-deck-generator
-version: "1.0.0"
+displayName: Slide Deck Generator
+version: 1.0.0
+summary: 把笔记、文本、代码变成结构化的演示文稿
 description: "Use when the user wants to create slides, generate a presentation, turn notes into a deck, or build pitch materials. Triggers on 'make slides', 'create a presentation', 'turn this into slides', 'generate a deck', 'build a pitch deck', or when the user uploads content and wants presentation output."
+license: MIT
 ---
 
 # Slide Deck Generator
