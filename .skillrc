@@ -1,0 +1,13 @@
+{
+  "pptx": {
+    "slide_width": 13.333,
+    "slide_height": 7.5,
+    "title_font_size": 44,
+    "content_font_size": 20,
+    "max_bullets_per_slide": 5
+  },
+  "output": {
+    "formats": ["pptx", "json", "markdown"],
+    "default_format": "pptx"
+  }
+}
