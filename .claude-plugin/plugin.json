@@ -1,0 +1,15 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "slide-deck-generator",
+  "description": "Generate editable PowerPoint presentations from notes, markdown, and code with real PPTX output.",
+  "author": {
+    "name": "Marnie0415",
+    "url": "https://github.com/Marnie0415"
+  },
+  "homepage": "https://github.com/Marnie0415/slide-deck-generator",
+  "repository": "https://github.com/Marnie0415/slide-deck-generator",
+  "license": "MIT",
+  "keywords": ["pptx", "powerpoint", "presentation", "slides", "agent-skill"],
+  "skills": ".",
+  "version": "1.1.0"
+}
