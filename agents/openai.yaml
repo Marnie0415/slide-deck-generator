@@ -1,0 +1,4 @@
+interface:
+  display_name: "Slide Deck Generator"
+  short_description: "Create presentation slides from notes, text, or code"
+  default_prompt: "Generate slides from my notes"
